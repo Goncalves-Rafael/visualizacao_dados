@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <title>Lendo arquivos externos</title>
+    <meta charset="utf-8">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="estilo.css">
+</head>
+
+<body>
+
+    <div id="caixa">
+        <div>
+            <canvas id="grafico_linhas_estado_ano_firespots"></canvas>
+            <canvas id="grafico_linhas_estado_ano_desmatamento"></canvas>
+        </div>
+        <div>
+            <canvas id="grafico_mapa"></canvas>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const url = "inpe_brazilian_amazon_fires_1999_2019.csv";
+        var fireSpots = []
+        var stateMap = {}
+        fetch(url)
+            .then(resposta => resposta.text())
+            .then(data => {
+                data = data.split("\n")
+                data = data.map(i=>i.split(","))
+                for (let i = 1; i < data.length; i++) {
+                    const spotData = data[i]
+                    if (spotData.length == 1) {
+                        continue
+                    }
+                    const spot = {
+                        year: spotData[0],
+                        month: spotData[1],
+                        state: spotData[2],
+                        latitude: spotData[3],
+                        longitude: spotData[4],
+                        firespots: spotData[5] ? parseInt(spotData[5].replace("\r", '')) : 0
+                    }
+                    fireSpots.push(spot)
+                    if (!(spot.state in stateMap)) {
+                        stateMap[spot.state] = []
+                    }
+                    stateMap[spot.state][spot.year - 1999] = (stateMap[spot.state][spot.year - 1999] || 0) + spot.firespots
+                }
+                atualizarGraficoDeLinhas(stateMap)
+            })
+    </script>
+</body>
+</html>
