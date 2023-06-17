@@ -37,11 +37,12 @@
 
     <!-- SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <script src="loadcsvs.js"></script>
+    <script src="lineScript.js"></script>
     <script src="mapScript.js"></script>
     <script>
-        const url_firespots = "inpe_brazilian_amazon_fires_1999_2019.csv";
-        const url_fenomenos = "el_nino_la_nina_1999_2019.csv";
+        // VARIÁVEIS GLOBAIS
+        
         var selectedLine = null
         var selectedState = null
         var selectedYear = 1999
@@ -52,56 +53,13 @@
         var fenomenoSeries = null
         var fireSpotsDataset = null
 
-        fetch(url_fenomenos)
-            .then(resposta => resposta.text())
-            .then(data => {
-                data = data.split("\n")
-                data = data.map(i=>i.split(","))
-                for (let i = 1; i < data.length; i++) {
-                    const fenomeno = data[i]
-                    if (fenomeno.length == 1) {
-                        continue
-                    }
-                    const evento = {
-                        start: fenomeno[0],
-                        end: fenomeno[1],
-                        phenomenon: fenomeno[2],
-                        severity: fenomeno[3].replace("\r", '')
-                    }
-
-                    fenomenoAno[evento.start] = evento
-                }
-            })
-
-        fetch(url_firespots)
-            .then(resposta => resposta.text())
-            .then(data => {
-                data = data.split("\n")
-                data = data.map(i=>i.split(","))
-                for (let i = 1; i < data.length; i++) {
-                    const spotData = data[i]
-                    if (spotData.length == 1) {
-                        continue
-                    }
-                    const spot = {
-                        year: spotData[0],
-                        month: spotData[1],
-                        state: spotData[2],
-                        lat: spotData[3],
-                        long: spotData[4],
-                        firespots: spotData[5] ? parseInt(spotData[5].replace("\r", '')) : 0
-                    }
-                    fireSpots.push(spot)
-                    if (!(spot.state in stateMap)) {
-                        stateMap[spot.state] = []
-                    }
-                    stateMap[spot.state][spot.year - 1999] = (stateMap[spot.state][spot.year - 1999] || 0) + spot.firespots
-                }
-                console.log(Object.keys(stateMap))
-                atualizarGraficoDeLinhas(stateMap)
-                loadMap(fireSpots)
-            })
+        // CARREGA CSV's E INICIALIZA OS GRÁFICOS
+        carregarCsv().then(result => {
+            atualizarGraficoDeLinhas(stateMap)
+            loadMap(fireSpots)
+        })
     
+        // REGISTRA HANDLERS
         const slider = document.getElementById("year_range");
         const rangeHandler = ev => {
             selectedYear = ev.target.value

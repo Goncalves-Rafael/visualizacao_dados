@@ -1,3 +1,4 @@
+// CONFIGURAR CORES DOS FENOMENOS
 const COLORS_FENOMENOS = {
     'El Nino': {
         'Very Strong': '#9d5716',
@@ -63,25 +64,12 @@ function loadMap() {
     fenomenoSeries = map.choropleth(getStatesDataSets());
     fenomenoSeries.labels().fontColor('black');
   
-    // create choropleth series
-    // series = map.choropleth(dataSet);
-  
-    // // set geoIdField to 'id', this field contains in geo data meta properties
-    // series.geoIdField('id');
-  
-    // // set map color settings
-    // series.colorScale(anychart.scales.linearColor('#deebf7', '#3182bd'));
-    // series.hovered().fill('#addd8e');
-
-    // creates Dataset from Sample data
     fireSpotsDataset = anychart.data.set(fireSpots).mapAs();
-    let color = 'red'
-    let name = 'teste'
     let min = 1
     let max = 580
     mapSeries = map.marker(fireSpotsDataset.filter('year', filterByYear));
     mapSeries
-        .name(name)
+        .name('Focos de Incêndio')
         .fill((el) => {
             if (el.index >= 0) {
                 const { firespots } = el.iterator.f
@@ -106,7 +94,7 @@ function loadMap() {
     mapSeries
         .legendItem()
         .iconType('circle')
-        .iconFill(color)
+        .iconFill('Red')
         .iconStroke('2 #E1E1E1');
 
   
