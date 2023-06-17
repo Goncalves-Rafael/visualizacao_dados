@@ -5,6 +5,7 @@
 1. Calcular valores por estado em [mapScript.js::getStatesDataSets](mapScript.js)
 1. Adicionar um gráfico semelhante ao [lineScript.js](lineScript.js) para os dados de desmatamento
 1. Melhorar o filtro de range de ano, foi uma solução temporário só para testes
+1. Adicionar legendas necessárias em cada gráfico
 
 ## Executar
 Se tiver npx instalado basta executar na raiz:
