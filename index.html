@@ -5,6 +5,17 @@
     <title>Visualização de Dados</title>
     <meta charset="utf-8">
 
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-map.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
+    <script src="https://cdn.anychart.com/geodata/latest/custom/world/world.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
+    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <script src="https://cdn.anychart.com/geodata/2.2.0/countries/brazil/brazil.js"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="estilo.css">
 </head>
@@ -17,17 +28,26 @@
             <canvas id="grafico_linhas_estado_ano_desmatamento"></canvas>
         </div>
         <div>
-            <canvas id="grafico_mapa"></canvas>
+            <div class="slidecontainer">
+                <input type="range" min="1999" max="2019" value="1999" class="slider" id="year_range">
+            </div>
+            <div id="container"></div>
         </div>
     </div>
 
     <!-- SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
+    <script src="mapScript.js"></script>
     <script>
         const url = "inpe_brazilian_amazon_fires_1999_2019.csv";
+        var selectedLine = null
+        var selectedState = null
+        var selectedYear = 1999
         var fireSpots = []
         var stateMap = {}
+        var mapSeries = null
+        var fireSpotsDataset = null
         fetch(url)
             .then(resposta => resposta.text())
             .then(data => {
@@ -42,8 +62,8 @@
                         year: spotData[0],
                         month: spotData[1],
                         state: spotData[2],
-                        latitude: spotData[3],
-                        longitude: spotData[4],
+                        lat: spotData[3],
+                        long: spotData[4],
                         firespots: spotData[5] ? parseInt(spotData[5].replace("\r", '')) : 0
                     }
                     fireSpots.push(spot)
@@ -52,8 +72,18 @@
                     }
                     stateMap[spot.state][spot.year - 1999] = (stateMap[spot.state][spot.year - 1999] || 0) + spot.firespots
                 }
+                console.log(Object.keys(stateMap))
                 atualizarGraficoDeLinhas(stateMap)
+                loadMap(fireSpots)
             })
+    
+        const slider = document.getElementById("year_range");
+        const rangeHandler = ev => {
+            selectedYear = ev.target.value
+            updateMapData()
+        }
+        slider.addEventListener("change", rangeHandler);
+        slider.addEventListener("input", rangeHandler);
     </script>
 </body>
 </html>

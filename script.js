@@ -1,6 +1,3 @@
-var selectedLine = null
-
-
 const prepararDados = (dados) => {
     const labels = [1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
     const datasets = []
@@ -49,8 +46,10 @@ const atualizarGraficoDeLinhas = (dados) => {
             const { datasetIndex } = points[0]
             if (selectedLine == datasetIndex) {
                 selectedLine = null
+                selectedState = null
             } else {
                 selectedLine = datasetIndex
+                selectedState = chart.config.data.datasets[datasetIndex].label
             }
             for (let i = 0; i < chart.config.data.datasets.length; i++) {
                 if (selectedLine == null || i == datasetIndex) {
@@ -63,6 +62,7 @@ const atualizarGraficoDeLinhas = (dados) => {
             }
             
             chart.update()
+            updateMapData()
         }
     }
 }
