@@ -1,3 +1,18 @@
+const COLORS_FENOMENOS = {
+    'El Nino': {
+        'Very Strong': '#9d5716',
+        'Weak': '#ffe3c8',
+        'Moderate': '#ffc691',
+        'Strong': '#e06f1f'
+    },
+    'La Nina': {
+        'Very Strong': '#8674aa',
+        'Weak': '#f1ebff',
+        'Moderate': '#e4d6ff',
+        'Strong': '#cda5f3'
+    },
+}
+
 function filterByState(val) {
     return selectedState == null || val == selectedState
 }
@@ -8,10 +23,29 @@ function filterByYear(val) {
 
 function updateMapData() {
     mapSeries.data(fireSpotsDataset.filter('state', filterByState).filter('year', filterByYear))
+    fenomenoSeries.data(getStatesDataSets())
 }
 
 function scale (number, inMin, inMax, outMin, outMax) {
     return parseInt((number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin)
+}
+
+function getStatesDataSets() {
+    const fenomenoAtual = fenomenoAno[selectedYear]
+    const currentColor = COLORS_FENOMENOS[fenomenoAtual.phenomenon][fenomenoAtual.severity]
+    return anychart.data.set(
+        [
+            {"id":"BR.AC","value":3, "fill": currentColor},
+            {"id":"BR.AM","value":4, "fill": currentColor},
+            {"id":"BR.MA","value":5, "fill": currentColor},
+            {"id":"BR.PA","value":6, "fill": currentColor},
+            {"id":"BR.RO","value":7, "fill": currentColor},
+            {"id":"BR.TO","value":8, "fill": currentColor},
+            {"id":"BR.MT","value":12, "fill": currentColor},
+            {"id":"BR.RR","value":25, "fill": currentColor},
+            {"id":"BR.AP","value":26, "fill": currentColor}
+        ]
+    );
 }
 
 function loadMap() {
@@ -22,26 +56,12 @@ function loadMap() {
     map.geoData(anychart.maps['brazil']);
    
     // create data set
-    var dataSet = anychart.data.set(
-        [
-            {"id":"BR.AC","value":3},
-            {"id":"BR.AM","value":4},
-            {"id":"BR.MA","value":5},
-            {"id":"BR.PA","value":6},
-            {"id":"BR.RO","value":7},
-            {"id":"BR.TO","value":8},
-            {"id":"BR.MT","value":12},
-            {"id":"BR.RR","value":25},
-            {"id":"BR.AP","value":26}
-        ]
-    );
-
     map.unboundRegions().fill('#eee');
     map.title().useHtml(true).hAlign('center');
     map.title('<span style="font-size: 18px;">Mapa de Focos de Incêndio</span><br><span style="font-size:12px;">Mova o mouse para ver as ocorrências em cada estado</span>');
 
-    var series = map.choropleth(dataSet);
-    series.labels().fontColor('black');
+    fenomenoSeries = map.choropleth(getStatesDataSets());
+    fenomenoSeries.labels().fontColor('black');
   
     // create choropleth series
     // series = map.choropleth(dataSet);

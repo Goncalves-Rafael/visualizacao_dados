@@ -40,15 +40,40 @@
     <script src="script.js"></script>
     <script src="mapScript.js"></script>
     <script>
-        const url = "inpe_brazilian_amazon_fires_1999_2019.csv";
+        const url_firespots = "inpe_brazilian_amazon_fires_1999_2019.csv";
+        const url_fenomenos = "el_nino_la_nina_1999_2019.csv";
         var selectedLine = null
         var selectedState = null
         var selectedYear = 1999
         var fireSpots = []
         var stateMap = {}
+        var fenomenoAno = {}
         var mapSeries = null
+        var fenomenoSeries = null
         var fireSpotsDataset = null
-        fetch(url)
+
+        fetch(url_fenomenos)
+            .then(resposta => resposta.text())
+            .then(data => {
+                data = data.split("\n")
+                data = data.map(i=>i.split(","))
+                for (let i = 1; i < data.length; i++) {
+                    const fenomeno = data[i]
+                    if (fenomeno.length == 1) {
+                        continue
+                    }
+                    const evento = {
+                        start: fenomeno[0],
+                        end: fenomeno[1],
+                        phenomenon: fenomeno[2],
+                        severity: fenomeno[3].replace("\r", '')
+                    }
+
+                    fenomenoAno[evento.start] = evento
+                }
+            })
+
+        fetch(url_firespots)
             .then(resposta => resposta.text())
             .then(data => {
                 data = data.split("\n")
