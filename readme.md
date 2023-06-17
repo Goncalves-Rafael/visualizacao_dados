@@ -1,3 +1,6 @@
+## Acesso:
+Disponível https://goncalves-rafael.github.io/visualizacao_dados/
+
 ## TODO:
 1. Definir as cores de cada estado.
 1. Configurar cores dos fenômenos em [mapScript.js COLORS_FENOMENOS](mapScript.js)
