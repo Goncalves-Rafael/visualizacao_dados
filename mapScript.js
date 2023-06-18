@@ -1,16 +1,16 @@
 // CONFIGURAR CORES DOS FENOMENOS
 const COLORS_FENOMENOS = {
     'El Nino': {
-        'Very Strong': '#9d5716',
-        'Weak': '#ffe3c8',
-        'Moderate': '#ffc691',
-        'Strong': '#e06f1f'
+        'Very Strong': '#351c75',
+        'Weak': '#b4a7d6',
+        'Moderate': '#8e7cc3',
+        'Strong': '#674ea7'
     },
     'La Nina': {
-        'Very Strong': '#8674aa',
-        'Weak': '#f1ebff',
-        'Moderate': '#e4d6ff',
-        'Strong': '#cda5f3'
+        'Very Strong': '#b45f06',
+        'Weak': '#f9cb9c',
+        'Moderate': '#f6b26b',
+        'Strong': '#e69138'
     },
 }
 
