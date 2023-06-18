@@ -36,15 +36,15 @@ function getStatesDataSets() {
     const currentColor = COLORS_FENOMENOS[fenomenoAtual.phenomenon][fenomenoAtual.severity]
     return anychart.data.set(
         [
-            {"id":"BR.AC","value":3, "fill": currentColor},
-            {"id":"BR.AM","value":4, "fill": currentColor},
-            {"id":"BR.MA","value":5, "fill": currentColor},
-            {"id":"BR.PA","value":6, "fill": currentColor},
-            {"id":"BR.RO","value":7, "fill": currentColor},
-            {"id":"BR.TO","value":8, "fill": currentColor},
-            {"id":"BR.MT","value":12, "fill": currentColor},
-            {"id":"BR.RR","value":25, "fill": currentColor},
-            {"id":"BR.AP","value":26, "fill": currentColor}
+            {"id":"BR.AC","value":stateMap["ACRE"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.AM","value":stateMap["AMAZONAS"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.MA","value":stateMap["MARANHAO"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.PA","value":stateMap["PARA"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.RO","value":stateMap["RONDONIA"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.TO","value":stateMap["TOCANTINS"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.MT","value":stateMap["MATO GROSSO"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.RR","value":stateMap["RORAIMA"][selectedYear - 1999], "fill": currentColor},
+            {"id":"BR.AP","value":stateMap["AMAPA"][selectedYear - 1999], "fill": currentColor}
         ]
     );
 }
@@ -91,13 +91,18 @@ function loadMap() {
 
     mapSeries.hovered().stroke('2 #fff').size(8);
 
+    // sets Tooltip for series
+    mapSeries.tooltip().titleFormat("Coordenadas")
+
     mapSeries
         .legendItem()
         .iconType('circle')
         .iconFill('Red')
         .iconStroke('2 #E1E1E1');
 
-  
+    // turns on the legend for the sample
+    map.legend(true);
+
     //set map container id (div)
     map.container('container');
   

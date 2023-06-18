@@ -25,9 +25,20 @@ body,
 .slidecontainer > input {
     width: 100%;
     max-width: 750px;
+    font-family: 'Tahoma'
 }
 
 datalist {
     display: flex;
     justify-content: space-between;
+}
+
+#titlebox {
+  position: absolute;
+  left: 50px;
+  width: calc(100% - 100px);
+  border: 1px solid black;
+  background-color: transparent;
+  padding: 5px;
+  text-align: center;
 }
