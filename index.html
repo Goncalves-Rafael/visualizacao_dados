@@ -20,16 +20,13 @@
     <link rel="stylesheet" href="estilo.css">
 </head>
 
-<body>
-
-    <div id="titlebox">
-        <h1 style="font-family: Tahoma">Degradação da Floresta Amazônica Brasileira 1999-2019</h1>
-    </div>
+<body style="overflow: hidden;">
     <div id="caixa">
+        <h1 style="font-family: Tahoma; text-align: center;" id="titulo">Degradação da Floresta Amazônica Brasileira 1999-2019</h1>
         <div>
-            <canvas id="grafico_linhas_estado_ano_firespots"></canvas>
-            <canvas id="grafico_linhas_estado_ano_desmatamento"></canvas>
-            <canvas id="grafico_barras_estado_total_desmatamento"></canvas>
+            <canvas id="grafico_linhas_estado_ano_firespots" style="max-height: calc(100%/3);"></canvas>
+            <canvas id="grafico_linhas_estado_ano_desmatamento" style="max-height: calc(100%/3);"></canvas>
+            <canvas id="grafico_barras_estado_total_desmatamento" style="max-height: calc(100%/3);"></canvas>
         </div>
         <div>
             <div class="slidecontainer">
