@@ -16,10 +16,18 @@ body,
 .slidecontainer {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    flex-direction: column;
+    align-content: stretch;
+    align-items: center;
 }
 
 .slidecontainer > input {
     width: 100%;
-    max-width: 400px;
+    max-width: 750px;
+}
+
+datalist {
+    display: flex;
+    justify-content: space-between;
 }
