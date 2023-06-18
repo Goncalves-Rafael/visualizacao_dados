@@ -1,10 +1,10 @@
-const prepararDados = (dados) => {
+const prepararDados = () => {
     const labels = [1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
     const datasets = []
-    for (const state in dados) {
+    for (const state in stateMap) {
         datasets.push({
             label: state,
-            data: dados[state]
+            data: stateMap[state]
           })
     }
     return {
@@ -13,7 +13,7 @@ const prepararDados = (dados) => {
       };
 }
 
-const atualizarGraficoDeLinhas = (dados) => {
+const atualizarGraficoDeLinhas = () => {
     // gráfico 3 - gráfico de linhas
     const ctx3 = document.querySelector("#grafico_linhas_estado_ano_firespots");
 
@@ -22,7 +22,7 @@ const atualizarGraficoDeLinhas = (dados) => {
         type: 'line',
         
         // data = recebe os dados
-        data: prepararDados(dados),
+        data: prepararDados(),
 
         // options = options de configuração do gráfico
         options: { plugins: {
@@ -33,8 +33,8 @@ const atualizarGraficoDeLinhas = (dados) => {
         }}
     })
 
-    const originalColors = chart.config.data.datasets.map(dataset => {
-        return {
+    chart.config.data.datasets.forEach(dataset => {
+        originalColors[dataset.label] = {
             bColor: dataset.borderColor,
             bgColor: dataset.backgroundColor
         }
@@ -44,27 +44,10 @@ const atualizarGraficoDeLinhas = (dados) => {
         const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true}, true)
         if (points[0]) {
             const { datasetIndex } = points[0]
-            if (selectedLine == datasetIndex) {
-                selectedLine = null
-                selectedState = null
-            } else {
-                selectedLine = datasetIndex
-                selectedState = chart.config.data.datasets[datasetIndex].label
-            }
-            for (let i = 0; i < chart.config.data.datasets.length; i++) {
-                if (selectedLine == null || i == datasetIndex) {
-                    chart.config.data.datasets[i].borderColor = originalColors[i].bColor
-                    chart.config.data.datasets[i].backgroundColor = originalColors[i].bgColor
-                } else {
-                    chart.config.data.datasets[i].borderColor = 'rgb(218, 223, 225)'
-                    chart.config.data.datasets[i].backgroundColor = 'rgb(218, 223, 225)'
-                }
-            }
-            
-            chart.update()
-            updateMapData()
+            updateSelectedDataset(chart, datasetIndex)
         }
     }
+    charts.push(chart)
 }
 
 

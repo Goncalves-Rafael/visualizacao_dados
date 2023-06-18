@@ -1,5 +1,6 @@
 const url_firespots = "inpe_brazilian_amazon_fires_1999_2019.csv";
 const url_fenomenos = "el_nino_la_nina_1999_2019.csv";
+const url_desmatamento = "def_area_2004_2019.csv";
 
 function carregarCsvFenomenos() {
     return new Promise((res, rej) => {
@@ -60,9 +61,50 @@ function carregarCsvFireSpots() {
     })
 }
 
+function carregarCsvDesmatamento() {
+    return new Promise((res, rej) => {
+        fetch(url_desmatamento)
+            .then(resposta => resposta.text())
+            .then(data => {
+                desmatamentoPorEstado["ACRE"] = []
+                desmatamentoPorEstado["AMAZONAS"] = []
+                desmatamentoPorEstado["AMAPA"] = []
+                desmatamentoPorEstado["MARANHAO"] = []
+                desmatamentoPorEstado["MATO GROSSO"] = []
+                desmatamentoPorEstado["PARA"] = []
+                desmatamentoPorEstado["RONDONIA"] = []
+                desmatamentoPorEstado["RORAIMA"] = []
+                desmatamentoPorEstado["TOCANTINS"] = []
+
+                data = data.split('\n')
+                data = data.map(i=>i.split(","))
+                
+                for (let i = 1; i < data.length; i++) {
+                    const desmatamentoData = data[i]
+                    if (desmatamentoData.length == 1) {
+                        continue
+                    }
+                    const [ ano, AC, AM, AP, MA, MT, PA, RO, RR, TO ] = desmatamentoData
+                    desmatamentoPorEstado["ACRE"].push(parseInt(AC))
+                    desmatamentoPorEstado["AMAZONAS"].push(parseInt(AM))
+                    desmatamentoPorEstado["AMAPA"].push(parseInt(AP))
+                    desmatamentoPorEstado["MARANHAO"].push(parseInt(MA))
+                    desmatamentoPorEstado["MATO GROSSO"].push(parseInt(MT))
+                    desmatamentoPorEstado["PARA"].push(parseInt(PA))
+                    desmatamentoPorEstado["RONDONIA"].push(parseInt(RO))
+                    desmatamentoPorEstado["RORAIMA"].push(parseInt(RR))
+                    desmatamentoPorEstado["TOCANTINS"].push(parseInt(TO))
+                }
+                res(desmatamentoPorEstado)
+            })
+            .catch(rej)
+    })
+}
+
 function carregarCsv()  {
     const promises = []
     promises.push(carregarCsvFenomenos())
     promises.push(carregarCsvFireSpots())
+    promises.push(carregarCsvDesmatamento())
     return Promise.all(promises)
 }

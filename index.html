@@ -40,6 +40,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="loadcsvs.js"></script>
     <script src="lineScript.js"></script>
+    <script src="defLineScript.js"></script>
+    <script src="barScript.js"></script>
     <script src="mapScript.js"></script>
     <script>
         // VARIÁVEIS GLOBAIS
@@ -50,13 +52,45 @@
         var fireSpots = []
         var stateMap = {}
         var fenomenoAno = {}
+        var desmatamentoPorEstado = {}
         var mapSeries = null
         var fenomenoSeries = null
         var fireSpotsDataset = null
+        var originalColors = {}
+        var charts = []
+
+        function  updateChartSelection (chart) {
+            for (let i = 0; i < chart.config.data.datasets.length; i++) {
+                if (selectedLine == null || i == selectedLine) {
+                    chart.config.data.datasets[i].borderColor = originalColors[chart.config.data.datasets[i].label].bColor
+                    chart.config.data.datasets[i].backgroundColor = originalColors[chart.config.data.datasets[i].label].bgColor
+                } else {
+                    chart.config.data.datasets[i].borderColor = 'rgb(218, 223, 225)'
+                    chart.config.data.datasets[i].backgroundColor = 'rgb(218, 223, 225)'
+                }
+            }
+            chart.update()
+        }
+
+        function updateSelectedDataset(triggerChart, datasetIndex) {
+            if (selectedLine == datasetIndex) {
+                selectedLine = null
+                selectedState = null
+            } else {
+                selectedLine = datasetIndex
+                selectedState = triggerChart.config.data.datasets[datasetIndex].label
+            }
+            for (const chart of charts) {
+                updateChartSelection(chart)
+            }
+            updateMapData()
+        }
 
         // CARREGA CSV's E INICIALIZA OS GRÁFICOS
         carregarCsv().then(result => {
-            atualizarGraficoDeLinhas(stateMap)
+            atualizarGraficoDeLinhas()
+            atualizarGraficoDeLinhasDesmatamento()
+            criarGraficoDeBarras()
             loadMap(fireSpots)
         })
     
