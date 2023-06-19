@@ -116,6 +116,9 @@
             atualizarGraficoDeLinhasDesmatamento()
             criarGraficoDeBarras()
             loadMap(fireSpots)
+            for (const chart of charts) {
+                updateChartSelection(chart)
+            }
         })
     
         // REGISTRA HANDLERS

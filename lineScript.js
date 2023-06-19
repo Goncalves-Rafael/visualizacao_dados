@@ -40,6 +40,21 @@ const atualizarGraficoDeLinhas = () => {
         }
     })
 
+    originalColors["AMAPA"] = {
+        bColor: "#6e777a",
+        bgColor: "#939ea3"
+    }
+
+    originalColors["TOCANTINS"] = {
+        bColor: "#ba4343",
+        bgColor: "#e65353"
+    }
+
+    originalColors["ACRE"] = {
+        bColor: "#44ad46",
+        bgColor: "#55d957"
+    }
+
     chart.canvas.onclick = (event) => {
         const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true}, true)
         if (points[0]) {
