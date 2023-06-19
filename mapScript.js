@@ -78,36 +78,40 @@ function loadMap() {
 
     fenomenoSeries = map.choropleth(getStatesDataSets());
     fenomenoSeries.labels().fontColor('black');
+  
+    fireSpotsDataset = anychart.data.set(fireSpots).mapAs({size: "firespots"});
 
-    fireSpotsDataset = anychart.data.set(fireSpots).mapAs();
-    let min = 1
-    let max = 580
-    mapSeries = map.marker(fireSpotsDataset.filter('year', filterByYear));
+    let min = 1;
+    let max = 580;
+    mapSeries = map.bubble(fireSpotsDataset.filter('year', filterByYear));
+    
     mapSeries
         .name('Focos de Incêndio')
         .fill((el) => {
-        if (el.index >= 0) {
-            const { firespots } = el.iterator.f
-                return `rgb(${scale(firespots, min, max, 140, 255)}, 0, 0)`
-        }
-        return 'red'
+            if (el.index >= 0) {
+                const { firespots } = el.iterator.f;
+                return `rgba(${scale(firespots, min, max, 140, 255)}, 0, 0, 0.3)`;
+            }
+            return 'red';
         })
         .stroke((el) => {
             if (el.index >= 0) {
-                const { firespots } = el.iterator.f
-                return `rgb(${scale(firespots, min, max, 140, 255)}, 0, 0)`
+                const { firespots } = el.iterator.f;
+                return `rgb(${scale(firespots, min, max, 140, 255)}, 0, 0)`;
             }
-            return 'red'
+            return 'red';
         })
         .type('circle')
-        .size(4)
         .labels(false)
         .selectionMode('none');
+    
+    map.minBubbleSize("1%");
+    map.maxBubbleSize("5%");
 
     mapSeries.hovered().stroke('2 #fff').size(8);
 
     // sets Tooltip for series
-    mapSeries.tooltip().titleFormat("Coordenadas")
+    mapSeries.tooltip().titleFormat("Coordenadas");
 
     mapSeries
         .legendItem()
@@ -123,4 +127,4 @@ function loadMap() {
   
     //initiate map drawing
     map.draw();
-  };
+}
