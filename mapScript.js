@@ -139,7 +139,7 @@ function loadMap() {
             iconEnabled: false,
         })
         const legenda = [
-            { color: '#b45f06', text: "Muito Forte"},
+            { color: '#351c75', text: "Muito Forte"},
             { color: '#674ea7', text: "Forte"},
             { color: '#8e7cc3', text: "Moderado"},
             { color: '#b4a7d6', text: "Fraco"},
