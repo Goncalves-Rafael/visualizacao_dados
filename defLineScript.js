@@ -30,7 +30,7 @@ const atualizarGraficoDeLinhasDesmatamento = () => {
         options: { plugins: {
             title: {
                 display: true,
-                text: "Desmatamento ao Longo dos Anos por Estado"
+                text: "Desmatamento ao Longo dos Anos por Estado (Km2)"
             }
         }}
     })

@@ -31,7 +31,7 @@ const criarGraficoDeBarras = () => {
         options: { plugins: {
             title: {
                 display: true,
-                text: "Desmatamento Total por Estado"
+                text: "Desmatamento Total por Estado(Km2)"
             },
             legend: {
                 display: false
