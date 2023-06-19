@@ -1,18 +1,20 @@
 // CONFIGURAR CORES DOS FENOMENOS
 const COLORS_FENOMENOS = {
     'El Nino': {
-        'Very Strong': '#351c75',
         'Weak': '#b4a7d6',
         'Moderate': '#8e7cc3',
-        'Strong': '#674ea7'
+        'Strong': '#674ea7',
+        'Very Strong': '#351c75',
     },
     'La Nina': {
-        'Very Strong': '#b45f06',
         'Weak': '#f9cb9c',
         'Moderate': '#f6b26b',
-        'Strong': '#e69138'
+        'Strong': '#e69138',
+        'Very Strong': '#b45f06',
     },
 }
+
+const DEFAULT_COLOR = "#bbb" // 'rgb(144, 202, 249)'
 
 function filterByState(val) {
     return selectedState == null || val == selectedState
@@ -28,12 +30,25 @@ function updateMapData() {
 }
 
 function scale (number, inMin, inMax, outMin, outMax) {
+    if (number > inMax) {
+        number = inMax
+    } else if (number < inMin) {
+        number = inMin
+    }
     return parseInt((number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin)
 }
 
-function getStatesDataSets() {
+function getCurrentColor() {
     const fenomenoAtual = fenomenoAno[selectedYear]
-    const currentColor = COLORS_FENOMENOS[fenomenoAtual.phenomenon][fenomenoAtual.severity]
+    if (fenomenoAtual != null) {
+        return COLORS_FENOMENOS[fenomenoAtual.phenomenon][fenomenoAtual.severity]
+    }
+    return DEFAULT_COLOR
+}
+
+function getStatesDataSets() {
+    let currentColor = getCurrentColor()
+    
     return anychart.data.set(
         [
             {"id":"BR.AC","value":stateMap["ACRE"][selectedYear - 1999], "fill": currentColor},
@@ -63,7 +78,7 @@ function loadMap() {
 
     fenomenoSeries = map.choropleth(getStatesDataSets());
     fenomenoSeries.labels().fontColor('black');
-  
+
     fireSpotsDataset = anychart.data.set(fireSpots).mapAs();
     let min = 1
     let max = 580
@@ -71,11 +86,11 @@ function loadMap() {
     mapSeries
         .name('Focos de Incêndio')
         .fill((el) => {
-            if (el.index >= 0) {
-                const { firespots } = el.iterator.f
+        if (el.index >= 0) {
+            const { firespots } = el.iterator.f
                 return `rgb(${scale(firespots, min, max, 140, 255)}, 0, 0)`
-            }
-            return 'red'
+        }
+        return 'red'
         })
         .stroke((el) => {
             if (el.index >= 0) {

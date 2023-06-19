@@ -49,6 +49,7 @@ function carregarCsvFireSpots() {
                         long: spotData[4],
                         firespots: spotData[5] ? parseInt(spotData[5].replace("\r", '')) : 0
                     }
+                    spot.value = spot.firespots
                     fireSpots.push(spot)
                     if (!(spot.state in stateMap)) {
                         stateMap[spot.state] = []

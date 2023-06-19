@@ -32,6 +32,9 @@ const criarGraficoDeBarras = () => {
             title: {
                 display: true,
                 text: "Desmatamento Total por Estado"
+            },
+            legend: {
+                display: false
             }
         }}
     })
