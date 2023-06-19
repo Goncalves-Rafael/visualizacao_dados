@@ -139,15 +139,15 @@ function loadMap() {
             iconEnabled: false,
         })
         const legenda = [
-            { color: '#351c75', text: "Muito Forte"},
-            { color: '#674ea7', text: "Forte"},
-            { color: '#8e7cc3', text: "Moderado"},
-            { color: '#b4a7d6', text: "Fraco"},
+            { color: COLORS_FENOMENOS["La Nina"]["Very Strong"], text: "Muito Forte"},
+            { color: COLORS_FENOMENOS["La Nina"].Strong, text: "Forte"},
+            { color: COLORS_FENOMENOS["La Nina"].Moderate, text: "Moderado"},
+            { color: COLORS_FENOMENOS["La Nina"].Weak, text: "Fraco"},
             { color: DEFAULT_COLOR, text: "Sem Fenômenos"},
-            { color: '#f9cb9c', text: "Fraco"},
-            { color: '#f6b26b', text: "Moderado"},
-            { color: '#e69138', text: "Forte"},
-            { color: '#b45f06', text: "Muito Forte"},
+            { color: COLORS_FENOMENOS["El Nino"].Weak, text: "Fraco"},
+            { color: COLORS_FENOMENOS["El Nino"].Moderate, text: "Moderado"},
+            { color: COLORS_FENOMENOS["El Nino"].Strong, text: "Forte"},
+            { color: COLORS_FENOMENOS["El Nino"]["Very Strong"], text: "Muito Forte"},
         ]
         for (const item of legenda) {
             items.push({
