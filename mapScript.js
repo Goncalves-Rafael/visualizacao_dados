@@ -78,6 +78,10 @@ function loadMap() {
 
     fenomenoSeries = map.choropleth(getStatesDataSets());
     fenomenoSeries.labels().fontColor('black');
+    fenomenoSeries.normal().stroke('#e0e0e0')
+    fenomenoSeries.hovered().fill("#eee").stroke(getCurrentColor)
+    fenomenoSeries.tooltip().format(el => `Focos de Incêndio em ${selectedYear}: ${el.value}`)
+
   
     fireSpotsDataset = anychart.data.set(fireSpots).mapAs({size: "firespots"});
 
@@ -111,8 +115,10 @@ function loadMap() {
     mapSeries.hovered().stroke('2 #fff').size(8);
 
     // sets Tooltip for series
-    mapSeries.tooltip().titleFormat("Coordenadas");
-
+    mapSeries.tooltip().titleFormat("Coordenadas").format((el, el2) => {
+        return `Lat: ${el.lat}\nLong: ${el.long}\nFocos de Incêndio: ${el.value}\n`
+    })
+    
     mapSeries
         .legendItem()
         .iconType('circle')
@@ -120,6 +126,47 @@ function loadMap() {
         .iconStroke('2 #E1E1E1');
 
     // turns on the legend for the sample
+    var legend = map.legend();
+    legend.position("right");
+    legend.align("middle");
+    legend.itemsLayout("vertical");
+    legend.itemsFormatter(function(items){
+        const baseItem = items.shift()
+        items[0].text = "Raio e intensidade indicam \n Número de focos de incêndio"
+        items[0].iconStroke = "rgb(148, 0, 0)"
+        items.push({
+            text: "La Niña ↓",
+            iconEnabled: false,
+        })
+        const legenda = [
+            { color: '#351c75', text: "Muito Forte"},
+            { color: '#674ea7', text: "Forte"},
+            { color: '#8e7cc3', text: "Moderado"},
+            { color: '#b4a7d6', text: "Fraco"},
+            { color: DEFAULT_COLOR, text: "Sem Fenômenos"},
+            { color: '#f9cb9c', text: "Fraco"},
+            { color: '#f6b26b', text: "Moderado"},
+            { color: '#e69138', text: "Forte"},
+            { color: '#b45f06', text: "Muito Forte"},
+        ]
+        for (const item of legenda) {
+            items.push({
+                ...baseItem,
+                iconEnabled: true,
+                iconFill: item.color,
+                iconSize: 20,
+                iconType: "rectangle",
+                text: item.text,
+                iconStroke: "black"
+            });
+        }
+        
+        items.push({
+            text: "El Niño ↑",
+            iconEnabled: false,
+        })
+        return items;
+    });
     map.legend(true);
 
     //set map container id (div)
